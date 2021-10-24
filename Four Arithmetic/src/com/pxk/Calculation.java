@@ -7,22 +7,20 @@ import java.util.Stack;
 /**
  * @author pxk
  * @date 2021年10月23日 17:00
+ * <p>
+ * 计算中缀表达式
  */
 public class Calculation {
-
     /**
-     * 判断是不是非数字（包括'）
+     * 对本类里的方法进行测试
      *
-     * @param c
-     * @return
+     * @param args
      */
-    private static boolean isSymbol(char c) {
-        return (c == '('
-                || c == ')'
-                || c == '+'
-                || c == '-'
-                || c == '÷'
-                || c == '×');
+    public static void main(String[] args) {
+        String e = "2 × ( 1 ÷ ( 4'1/8 ÷ 2'2/3 ) ) ";
+        System.out.println(toInfixExpressionList(e));
+        System.out.println(toSuffixExpressionList(toInfixExpressionList(e)));
+        System.out.println(calculate(toSuffixExpressionList(toInfixExpressionList(e))));
     }
 
     /**
@@ -34,27 +32,9 @@ public class Calculation {
     private static List<String> toInfixExpressionList(String infixExpression) {
         // 定义一个List，存放中缀表达式对应的内容
         List<String> list = new ArrayList<>();
-        // 相当于一个指针，用于遍历中缀表达式字符串
-        int index = 0;
-        // 用于多位数的拼接
-        String str;
-
-        while (index < infixExpression.length()) {
-            // 如果c是一个非数字，直接加入到List
-            if (isSymbol(infixExpression.charAt(index))) {
-                list.add("" + infixExpression.charAt(index));
-                index++;    // 指针后移
-            } else {  // 如果c是数字,包括'
-                // 先将str置空
-                str = "";
-                while (index < infixExpression.length()
-                        && !isSymbol(infixExpression.charAt(index))) {
-                    str += infixExpression.charAt(index);
-                    index++;    // 指针后移
-                }
-                list.add(str);
-            }
-
+        String[] temp = infixExpression.split(" ");
+        for (String ele : temp) {
+            list.add(ele);
         }
 
         return list;
@@ -103,71 +83,6 @@ public class Calculation {
     }
 
     /**
-     * 传入一个后缀表达式对应的List，计算结果
-     *
-     * @param suffixExpressionList
-     * @return
-     */
-    private static double calculate(List<String> suffixExpressionList) {
-        // 创建栈，只需要一个即可
-        Stack<String> stack = new Stack<>();
-        // 遍历list
-        for (String item : suffixExpressionList) {
-            if (item.equals("×")
-                    || item.equals("÷")
-                    || item.equals("+")
-                    || item.equals("-")) {  // 匹配的是运算符
-                // pop出两个数，并运算，在入栈
-                double num2 = toDouble(stack.pop());
-                double num1 = toDouble(stack.pop());
-                double res = 0;
-                if (item.equals("+")) {
-                    res = num1 + num2;
-                } else if (item.equals("-")) {
-                    res = num1 - num2;
-                } else if (item.equals("×")) {
-                    res = num1 * num2;
-                } else if (item.equals("÷")) {
-                    res = num1 / num2;
-                } else {
-                    throw new RuntimeException("运算符有误！");
-                }
-                // 将结果入栈
-                stack.push("" + res);
-            } else {
-                // 匹配的是数字，直接入栈
-                stack.push(item);
-            }
-        }
-
-        // 最后留在stack中的就是运算结果
-        return Double.parseDouble(stack.pop());
-    }
-
-    /**
-     * 将分数转换成double类型的数字
-     * 共有3中形式：整数、不带'的分数，带'的分数
-     *
-     * @param num
-     * @return
-     */
-    private static double toDouble(String num) {
-        if (num.contains("/")
-                && num.contains("'")) {
-            String[] str = num.split("'");
-            String[] str1 = str[1].split("/");
-            return Double.parseDouble(str[0])
-                    + Double.parseDouble(str1[0]) / Double.parseDouble(str1[1]);
-        } else if (num.contains("/")
-                && !num.contains("'")) {
-            String[] str = num.split("/");
-            return Double.parseDouble(str[0]) / Double.parseDouble(str[1]);
-        } else {
-            return Double.parseDouble(num);
-        }
-    }
-
-    /**
      * 获取运算符的优先级
      *
      * @param operation
@@ -184,11 +99,99 @@ public class Calculation {
     }
 
     /**
+     * 传入一个后缀表达式对应的List，计算结果
+     *
+     * @param suffixExpressionList
+     * @return
+     */
+    private static String calculate(List<String> suffixExpressionList) {
+        // 创建栈，只需要一个即可
+        Stack<String> stack = new Stack<>();
+        // 遍历list
+        for (String item : suffixExpressionList) {
+            if (item.equals("×")
+                    || item.equals("÷")
+                    || item.equals("+")
+                    || item.equals("-")) {  // 匹配的是运算符
+                // pop出两个数，并运算，在入栈
+                String num2 = stack.pop();
+                String num1 = stack.pop();
+                String res = actualCalculate(num1, num2, item);
+                // 将结果入栈
+                stack.push(res);
+            } else {
+                // 匹配的是数字，直接入栈
+                stack.push(item);
+            }
+        }
+
+        // 最后留在stack中的就是运算结果
+        return stack.pop();
+    }
+
+    /**
+     * 实际计算结果的方法
+     *
+     * @param num2
+     * @param num1
+     * @param operator
+     * @return
+     */
+    private static String actualCalculate(String num1, String num2, String operator) {
+        Fraction res = null;
+        Fraction f1 = null;
+        Fraction f2 = null;
+
+        if (num1.contains("/")
+                && num1.contains("'")) {
+            String[] str = num1.split("'");
+            String[] str1 = str[1].split("/");
+            f1 = new Fraction(Integer.parseInt(str[0]) * Integer.parseInt(str1[1]) + Integer.parseInt(str1[0]), Integer.parseInt(str1[1]));
+
+        } else if (num1.contains("/")
+                && !num1.contains("'")) {
+            String[] str = num1.split("/");
+            f1 = new Fraction(Integer.parseInt(str[0]), Integer.parseInt(str[1]));
+        } else {
+            f1 = new Fraction(Integer.parseInt(num1), 1);
+        }
+
+        if (num2.contains("/")
+                && num2.contains("'")) {
+            String[] str = num2.split("'");
+            String[] str1 = str[1].split("/");
+            f2 = new Fraction(Integer.parseInt(str[0]) * Integer.parseInt(str1[1]) + Integer.parseInt(str1[0]), Integer.parseInt(str1[1]));
+
+        } else if (num2.contains("/")
+                && !num2.contains("'")) {
+            String[] str = num2.split("/");
+            f2 = new Fraction(Integer.parseInt(str[0]), Integer.parseInt(str[1]));
+        } else {
+            f2 = new Fraction(Integer.parseInt(num2), 1);
+        }
+
+        if (operator.equals("×")) {
+            res = f1.mul(f1, f2);
+        }
+        if (operator.equals("÷")) {
+            res = f1.div(f1, f2);
+        }
+        if (operator.equals("+")) {
+            res = f1.add(f1, f2);
+        }
+        if (operator.equals("-")) {
+            res = f1.sub(f1, f2);
+        }
+        return "" + res;
+
+    }
+
+    /**
      * 对以上所有方法进行封装
      *
      * @param expression 计算式
      */
-    public static double getResult(String expression) {
+    public static String getResult(String expression) {
         List<String> infixExpressionList = toInfixExpressionList(expression);
 
         List<String> suffixExpressionList = toSuffixExpressionList(infixExpressionList);

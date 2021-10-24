@@ -1,15 +1,17 @@
 package com.test;
 
-import com.pxk.Calculation;
-import com.pxk.Expression;
-import com.pxk.GenerateExpression;
-import com.pxk.TxtIO;
+import com.pxk.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        /* 测试生成的随机数是否合理
+        for (int i = 0; i < 100; i++) {
+            System.out.println(new Fraction(10));
+        }*/
+
         int range = Integer.parseInt(args[0]);  // 取值范围
         List<Expression> expressionList = GenerateExpression.generateExpressionList(100, range, 3);
 
@@ -17,11 +19,11 @@ public class Main {
         TxtIO.clear("Exercises.txt");
         TxtIO.clear("Answers.txt");
         for (int i = 0; i < expressionList.size(); i++) {
-            TxtIO.writeTxt(i+1 + "、 " + expressionList.get(i), "Exercises.txt");
-            TxtIO.writeTxt(i+1 + "、 " + Calculation.getResult("" + expressionList.get(i)), "Answers.txt");
+            TxtIO.writeTxt(i+1 + ". " + expressionList.get(i), "Exercises.txt");
+//            TxtIO.writeTxt(i+1 + ". " + Calculation.getResult("" + expressionList.get(i)), "Answers.txt");
         }
 
-        List<Integer> correct = new ArrayList<>();
+  /*      List<Integer> correct = new ArrayList<>();
         List<Integer> wrong = new ArrayList<>();
         List<String> exercisefileList = TxtIO.readTxt("Four Arithmetic/src/exercisefile.txt");
         List<String> answerfileList = TxtIO.readTxt("Four Arithmetic/src/answerfile.txt");
@@ -33,6 +35,6 @@ public class Main {
             }
         }
         System.out.println("Correct:" + correct.size() + correct);
-        System.out.println("Wrong:" + wrong.size() + wrong);
+        System.out.println("Wrong:" + wrong.size() + wrong);*/
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * @author pxk
  * @date 2021年10月23日 21:01
+ *
  * 检查是否生成重复的计算式
  */
 public class Check {
@@ -26,7 +27,6 @@ public class Check {
         return false;
 
     }
-
 
     /**
      * 判断两个只有一位运算符的式子是否能通过有限次交互+×的到相同的式子
@@ -60,7 +60,6 @@ public class Check {
                     || list1.get(operator1 - 1).equals(list2.get(operator2 - 2)) && list1.get(operator1 - 2).equals(list2.get(operator2 - 1));
         }
     }
-
 
     /**
      * 判断两个式子是否能通过有限次交互+×的到相同的式子

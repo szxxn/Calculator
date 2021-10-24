@@ -65,14 +65,14 @@ public class Expression {
         for (int i = 0; i < data.length; i++) {
             //拼接数字
             for (int j = 0; j < leftBrackets[i]; j++) {
-                stringBuilder.append("(");
+                stringBuilder.append("( ");
             }
-            stringBuilder.append(data[i].toString());
+            stringBuilder.append(data[i].toString()+" ");
             for (int j = 0; j < rightBrackets[i]; j++) {
-                stringBuilder.append(")");
+                stringBuilder.append(") ");
             }
             if (i < operators.length) {
-                stringBuilder.append(operators[i]);
+                stringBuilder.append(operators[i]+" ");
             }
         }
         return stringBuilder.toString();

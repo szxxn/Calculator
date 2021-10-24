@@ -30,7 +30,7 @@ public class GenerateExpression {
         String[] operators = {"+", "-", "×", "÷"};
         Random random = new Random();
         // 每条计算式实际生成的运算符个数
-        int actualOperationCounts = random.nextInt(operatorUpperLimit + 1);
+        int actualOperationCounts = 0;
         while (actualOperationCounts == 0) {
             actualOperationCounts = random.nextInt(operatorUpperLimit + 1);
         }
@@ -91,7 +91,7 @@ public class GenerateExpression {
             }
         }
 
-//        System.out.println(expression);
+        System.out.println(expression);
         return expression;
     }
 
