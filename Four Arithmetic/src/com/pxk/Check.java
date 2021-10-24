@@ -11,36 +11,9 @@ import java.util.List;
 public class Check {
 
     /**
-     * 将逆波兰式的字符串转换为集合
+     * 判断一个字符串是否为运算符
      *
-     * @param str 字符串
-     * @return
-     */
-
-    public static List<String> stringToList(String str) {
-        List<String> list = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        sb.append(str);
-        while (sb.length() > 0) {
-            if (sb.charAt(0) == ' ') {
-                sb.delete(0, 1);
-                continue;
-            }
-            if (isOperator(String.valueOf(sb.charAt(0)))) {
-                list.add(String.valueOf(sb.charAt(0)));
-            } else {
-                list.add(sb.substring(0, sb.indexOf(" ")));
-            }
-            sb.delete(0, sb.indexOf(" "));
-        }
-        return list;
-    }
-
-
-    /**
-     * 判断一个字符串是否为运算符号
-     *
-     * @param str 运算符号
+     * @param str 运算符
      * @return true是为真，false不是为假
      */
     public static boolean isOperator(String str) {
@@ -50,40 +23,41 @@ public class Check {
                 || str.equals("×")) {
             return true;
         }
-
-
         return false;
+
     }
 
 
     /**
      * 判断两个只有一位运算符的式子是否能通过有限次交互+×的到相同的式子
      *
-     * @param arrayList_1 逆波兰式集合_1
-     * @param operator_1  逆波兰式集合_1中参与对比的运算符的下标
-     * @param arrayList_2 逆波兰式集合_2
-     * @param operator_2  逆波兰式集合_2中参与对比的运算符的下标
+     * @param list1     逆波兰式集合1
+     * @param operator1 逆波兰式集合1 中参与对比的运算符的下标
+     * @param list2     逆波兰式集合2
+     * @param operator2 逆波兰式集合2 中参与对比的运算符的下标
      * @return 相同返回true，不相同返回false
      */
-    public static boolean isExchange(ArrayList<String> arrayList_1, int operator_1, ArrayList<String> arrayList_2, int operator_2) {
+    public static boolean isExchange(List<String> list1, int operator1, List<String> list2, int operator2) {
         // 该函数主要通过判断 运算符的类型， 以及 两个参与运算数顺序是否相同或可进行互换后相同，来判断两个式子是否相同
 
         // 运算符是否相等
-        if (!arrayList_1.get(operator_1).equals(arrayList_2.get(operator_2))) {
+        if (!list1.get(operator1).equals(list2.get(operator2))) {
             return false;
         }
         // 运算符是否为除号或减号，要求参与运算的数的顺序必须相同，不能交换
-        if (arrayList_1.get(operator_1).equals("÷") || arrayList_1.get(operator_1).equals("-")) {
+        if (list1.get(operator1).equals("÷")
+                || list2.get(operator1).equals("-")) {
             // 例：2 1 - 和 2 1 - => true
             //    2 1 - 和 1 2 - => false
-            return arrayList_1.get(operator_1 - 2).equals(arrayList_2.get(operator_2 - 2)) && arrayList_1.get(operator_1 - 1).equals(arrayList_2.get(operator_2 - 1));
+            return list1.get(operator1 - 2).equals(list2.get(operator2 - 2))
+                    && list1.get(operator1 - 1).equals(list2.get(operator2 - 1));
         }
         // 运算符为加号或乘号，参与运算的数允许交换
         else {
             // 例：（ 1 2 + 和 1 2 + ）或 （ 1 2 + 和 2 1 + ) => true
             //     1 2 + 和 2 3 + => false
-            return arrayList_1.get(operator_1 - 2).equals(arrayList_2.get(operator_2 - 2)) && arrayList_1.get(operator_1 - 1).equals(arrayList_2.get(operator_2 - 1))
-                    || arrayList_1.get(operator_1 - 1).equals(arrayList_2.get(operator_2 - 2)) && arrayList_1.get(operator_1 - 2).equals(arrayList_2.get(operator_2 - 1));
+            return list1.get(operator1 - 2).equals(list2.get(operator2 - 2)) && list1.get(operator1 - 1).equals(list2.get(operator2 - 1))
+                    || list1.get(operator1 - 1).equals(list2.get(operator2 - 2)) && list1.get(operator1 - 2).equals(list2.get(operator2 - 1));
         }
     }
 
