@@ -13,7 +13,6 @@ public class GenerateExpression {
      * @param size               计算式的个数
      * @param range              数字的取值上限
      * @param operatorUpperLimit 运算符个数的上限
-     * @return
      */
     public static List<Expression> generateExpressionList(int size, int range, int operatorUpperLimit) {
         List<Expression> expressionList = new ArrayList<>();
@@ -48,6 +47,9 @@ public class GenerateExpression {
          */
         int i = 0;
         Fraction fraction = new Fraction(range);
+        while (fraction.getValue() == 0) {
+            fraction = new Fraction(range);
+        }
         expression.getData()[i] = fraction;
         for (i = 1; i < dataCounts; i++) {
             //生成操作符号
@@ -55,7 +57,9 @@ public class GenerateExpression {
             expression.getOperators()[i - 1] = operator;
             fraction = new Fraction(range);
             while ((operator.equals("÷") && fraction.getValue() == 0)
-                    || (operator.equals("-") && fraction.getValue() > expression.getData()[i - 1].getValue())) {
+                    || ((operator.equals("-") && ((expression.getData()[i - 1].getValue() - fraction.getValue()) < 0) || (expression.getData()[i - 1].getValue() - fraction.getValue()) == 0))
+//                    || (operator.equals("-") && (expression.getData()[i - 1].getValue() - fraction.getValue()) == 0)
+                    || (operator.equals("×") && fraction.getValue() == 0)) {
                 fraction = new Fraction(range);
             }
             expression.getData()[i] = fraction;
@@ -91,7 +95,7 @@ public class GenerateExpression {
             }
         }
 
-        System.out.println(expression);
+//        System.out.println(expression);
         return expression;
     }
 

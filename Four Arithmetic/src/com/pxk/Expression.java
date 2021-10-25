@@ -63,7 +63,7 @@ public class Expression {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
-            //拼接数字
+
             for (int j = 0; j < leftBrackets[i]; j++) {
                 stringBuilder.append("( ");
             }

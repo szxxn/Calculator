@@ -22,15 +22,18 @@ public class Fraction {
     /**
      * 此构造方法用于处理计算结果
      *
-     * @param numerator
-     * @param denominator
+     * @param numerator   分子
+     * @param denominator 分母
      */
     public Fraction(int numerator, int denominator) {
-        this.numerator = numerator;
-        this.denominator = denominator;
-        int a = simplification(numerator, denominator);
-        numerator = numerator / a;
-        denominator = denominator / a;
+        if (numerator != 0) {
+            int a = simplification(numerator, denominator);
+            this.numerator = numerator / a;
+            this.denominator = denominator / a;
+        } else {
+            this.numerator = numerator;
+            this.denominator = denominator;
+        }
     }
 
     /**
@@ -41,12 +44,12 @@ public class Fraction {
     public Fraction(int range) {
         Random random = new Random();
         denominator = random.nextInt(range);
-        if (this.denominator == 0) {
+        if (denominator == 0) {
             denominator = random.nextInt();
         } else {
             numerator = random.nextInt(denominator * range);
-        }
 
+        }
         // 化简
         if (numerator != 0) {
             int a = simplification(numerator, denominator);
@@ -72,16 +75,18 @@ public class Fraction {
      * @return 最大公约数
      */
     public int simplification(int a, int b) {
-        if (a < b) { // 将较大的数字放在上面
-            int temp = b;
-            b = a;
-            a = temp;
-        }
-        int r = a % b;
-        while (r != 0) {
-            a = b;
-            b = r;
-            r = a % b;
+        if (a != 0 && b != 0) {
+            if (a < b) { // 将较大的数字放在上面
+                int temp = b;
+                b = a;
+                a = temp;
+            }
+            int r = a % b;
+            while (r != 0) {
+                a = b;
+                b = r;
+                r = a % b;
+            }
         }
         return b;
     }
@@ -101,6 +106,7 @@ public class Fraction {
         int a = simplification(res.numerator, res.denominator);
         res.numerator = res.numerator / a;
         res.denominator = res.denominator / a;
+
         return res;
     }
 
@@ -157,6 +163,7 @@ public class Fraction {
         int a = simplification(res.numerator, res.denominator);
         res.numerator = res.numerator / a;
         res.denominator = res.denominator / a;
+
         return res;
     }
 

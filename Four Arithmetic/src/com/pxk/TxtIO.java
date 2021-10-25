@@ -87,7 +87,9 @@ public class TxtIO {
 
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                list.add(line);
+                String[] temp = line.split("\\.");
+                String a = temp[1].substring(1,temp[1].length());
+                list.add(a);
             }
         } catch (IOException e) {
             e.printStackTrace();

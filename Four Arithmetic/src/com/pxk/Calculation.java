@@ -16,12 +16,12 @@ public class Calculation {
      *
      * @param args
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String e = "2 × ( 1 ÷ ( 4'1/8 ÷ 2'2/3 ) ) ";
         System.out.println(toInfixExpressionList(e));
         System.out.println(toSuffixExpressionList(toInfixExpressionList(e)));
         System.out.println(calculate(toSuffixExpressionList(toInfixExpressionList(e))));
-    }
+    }*/
 
     /**
      * 将中缀表达式转成对应的List
@@ -85,7 +85,7 @@ public class Calculation {
     /**
      * 获取运算符的优先级
      *
-     * @param operation
+     * @param operation 运算符
      * @return
      */
     private static int getPriority(String operation) {
@@ -94,7 +94,7 @@ public class Calculation {
         } else if (operation.equals("+") || operation.equals("-")) {
             return 0;
         } else {
-            return -1;  // 假定目前的表达式只有"+", "-", "×", "÷"/
+            return -1;  // 假定目前的表达式只有"+", "-", "×", "÷"
         }
     }
 
@@ -147,7 +147,6 @@ public class Calculation {
             String[] str = num1.split("'");
             String[] str1 = str[1].split("/");
             f1 = new Fraction(Integer.parseInt(str[0]) * Integer.parseInt(str1[1]) + Integer.parseInt(str1[0]), Integer.parseInt(str1[1]));
-
         } else if (num1.contains("/")
                 && !num1.contains("'")) {
             String[] str = num1.split("/");
@@ -161,7 +160,6 @@ public class Calculation {
             String[] str = num2.split("'");
             String[] str1 = str[1].split("/");
             f2 = new Fraction(Integer.parseInt(str[0]) * Integer.parseInt(str1[1]) + Integer.parseInt(str1[0]), Integer.parseInt(str1[1]));
-
         } else if (num2.contains("/")
                 && !num2.contains("'")) {
             String[] str = num2.split("/");
@@ -187,15 +185,20 @@ public class Calculation {
     }
 
     /**
-     * 对以上所有方法进行封装
+     * 获得中缀表达式计算后的结果
      *
      * @param expression 计算式
      */
     public static String getResult(String expression) {
-        List<String> infixExpressionList = toInfixExpressionList(expression);
+        return calculate(getSuffixExpressionList(expression));
+    }
 
-        List<String> suffixExpressionList = toSuffixExpressionList(infixExpressionList);
-
-        return calculate(suffixExpressionList);
+    /**
+     * 获得中缀表达式对应的后缀表达式，对应的List
+     * @param expression
+     * @return
+     */
+    public static List<String> getSuffixExpressionList(String expression) {
+        return toSuffixExpressionList(toInfixExpressionList(expression));
     }
 }
