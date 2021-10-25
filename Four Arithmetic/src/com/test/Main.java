@@ -34,7 +34,10 @@ public class Main {
                 wrong.add(i);
             }
         }
-        System.out.println("Correct: " + correct.size() + " " + correct);
-        System.out.println("Wrong: " + wrong.size() + " " + wrong);
+//        System.out.println("Correct: " + correct.size() + " " + correct);
+//        System.out.println("Wrong: " + wrong.size() + " " + wrong);
+        TxtIO.clear("Four Arithmetic/src/Grade.txt");
+        TxtIO.writeTxt("Correct: " + correct.size() + " " + correct, "Four Arithmetic/src/Grade.txt");
+        TxtIO.writeTxt("Wrong: " + wrong.size() + " " + wrong, "Four Arithmetic/src/Grade.txt");
     }
 }

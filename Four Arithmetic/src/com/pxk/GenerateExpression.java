@@ -17,7 +17,14 @@ public class GenerateExpression {
     public static List<Expression> generateExpressionList(int size, int range, int operatorUpperLimit) {
         List<Expression> expressionList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            expressionList.add(i, generateExpression(range, operatorUpperLimit));
+            Expression e = generateExpression(range, operatorUpperLimit);
+            for (int j = 0; j < i; j++) {
+                while (Check.isSimilar(("" + e), ("" + expressionList.get(j)))) {
+                    e = generateExpression(range, operatorUpperLimit);
+                }
+            }
+            expressionList.add(i, e);
+
         }
         System.out.println(size + " 条算式已经成功生成，并且写入 Exercises.txt 文件！");
         return expressionList;
