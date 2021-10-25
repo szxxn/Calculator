@@ -57,11 +57,21 @@ public class GenerateExpression {
             expression.getOperators()[i - 1] = operator;
             fraction = new Fraction(range);
             while ((operator.equals("÷") && fraction.getValue() == 0)
-                    || ((operator.equals("-") && ((expression.getData()[i - 1].getValue() - fraction.getValue()) < 0) || (expression.getData()[i - 1].getValue() - fraction.getValue()) == 0))
-//                    || (operator.equals("-") && (expression.getData()[i - 1].getValue() - fraction.getValue()) == 0)
+                    || operator.equals("-") && ((expression.getData()[i - 1].getValue() - fraction.getValue()) <= 0)
                     || (operator.equals("×") && fraction.getValue() == 0)) {
-                fraction = new Fraction(range);
+                if (operator.equals("-")) {
+                    expression.getData()[i - 1] = new Fraction(range);
+                    fraction = new Fraction(range);
+                    // 写这个if代码，是因为有可能出现前一个数是0，那么后面一个数永远不可能比0小
+                    // 而且在实际中发现，前一个数字比较小的时候，后一个比前一个数的概率在电脑上生成的概率非常小！！！！！
+                } else {
+//                    System.out.println("前：" + expression.getData()[i - 1]);
+//                    System.out.println("旧后：" + fraction);
+                    fraction = new Fraction(range);
+//                    System.out.println("新后：" + fraction);
+                }
             }
+
             expression.getData()[i] = fraction;
         }
 

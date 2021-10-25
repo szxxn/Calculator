@@ -44,12 +44,11 @@ public class Fraction {
     public Fraction(int range) {
         Random random = new Random();
         denominator = random.nextInt(range);
-        if (denominator == 0) {
-            denominator = random.nextInt();
-        } else {
-            numerator = random.nextInt(denominator * range);
-
+        while (denominator == 0) {
+            denominator = random.nextInt(range);
         }
+        numerator = random.nextInt(denominator * range);
+
         // 化简
         if (numerator != 0) {
             int a = simplification(numerator, denominator);
