@@ -104,7 +104,7 @@ public class Calculation {
      * @param suffixExpressionList
      * @return
      */
-    private static String calculate(List<String> suffixExpressionList) {
+    private static String calculate(List<String> suffixExpressionList) throws Exception {
         // 创建栈，只需要一个即可
         Stack<String> stack = new Stack<>();
         // 遍历list
@@ -137,7 +137,7 @@ public class Calculation {
      * @param operator
      * @return
      */
-    private static String actualCalculate(String num1, String num2, String operator) {
+    private static String actualCalculate(String num1, String num2, String operator) throws Exception {
         Fraction res = null;
         Fraction f1 = null;
         Fraction f2 = null;
@@ -172,7 +172,12 @@ public class Calculation {
             res = f1.mul(f1, f2);
         }
         if (operator.equals("÷")) {
-            res = f1.div(f1, f2);
+            try {
+                res = f1.div(f1, f2);
+            } catch (Exception e) {
+                // 计算过程中出现 ÷ 0，需要重新生成式子
+                throw new Exception("被除数为0！");
+            }
         }
         if (operator.equals("+")) {
             res = f1.add(f1, f2);
@@ -189,7 +194,7 @@ public class Calculation {
      *
      * @param expression 计算式
      */
-    public static String getResult(String expression) {
+    public static String getResult(String expression) throws Exception {
         return calculate(getSuffixExpressionList(expression));
     }
 

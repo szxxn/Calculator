@@ -135,11 +135,13 @@ public class Fraction {
      * @param f2
      * @return
      */
-    public Fraction div(Fraction f1, Fraction f2) {
+    public Fraction div(Fraction f1, Fraction f2) throws Exception{
         Fraction res = new Fraction(1, 1);
         res.numerator = f1.numerator * f2.denominator;
         res.denominator = f2.numerator * f1.denominator;
-
+        if (res.denominator == 0) { // 计算过程中可能会出现 1 除于 （5-4-1），此时只要出现除于0，就重新生成式子
+            throw new Exception("被除数为0！");
+        }
         int a = simplification(res.numerator, res.denominator);
         res.numerator = res.numerator / a;
         res.denominator = res.denominator / a;

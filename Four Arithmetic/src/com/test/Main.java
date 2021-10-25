@@ -20,7 +20,11 @@ public class Main {
         TxtIO.clear("Answers.txt");
         for (int i = 0; i < expressionList.size(); i++) {
             TxtIO.writeTxt(i + 1 + ". " + expressionList.get(i), "Exercises.txt");
-            TxtIO.writeTxt(i + 1 + ". " + Calculation.getResult("" + expressionList.get(i)), "Answers.txt");
+            try {
+                TxtIO.writeTxt(i + 1 + ". " + Calculation.getResult("" + expressionList.get(i)), "Answers.txt");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         List<Integer> correct = new ArrayList<>();
@@ -28,10 +32,14 @@ public class Main {
         List<String> exercisefileList = TxtIO.readTxt("Four Arithmetic/src/exercisefile.txt");
         List<String> answerfileList = TxtIO.readTxt("Four Arithmetic/src/answerfile.txt");
         for (int i = 0; i < exercisefileList.size(); i++) {
-            if (Calculation.getResult(exercisefileList.get(i)).equals(answerfileList.get(i))) {
-                correct.add(i);
-            } else {
-                wrong.add(i);
+            try {
+                if (Calculation.getResult(exercisefileList.get(i)).equals(answerfileList.get(i))) {
+                    correct.add(i);
+                } else {
+                    wrong.add(i);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 //        System.out.println("Correct: " + correct.size() + " " + correct);

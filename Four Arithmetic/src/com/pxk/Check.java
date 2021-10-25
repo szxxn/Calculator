@@ -71,8 +71,14 @@ public class Check {
 
         if (list1.size() != list2.size()) {    // 两条算式的长度不同
             return false;
-        } else if (Calculation.getResult(expression_1).equals(Calculation.getResult(expression_2))) {   // 结果不同
-            return false;
+        } else {
+            try {
+                if (Calculation.getResult(expression_1).equals(Calculation.getResult(expression_2))) {   // 结果不同
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         // 逆波兰式中，第一次出现运算符的下标要么为 2，要么为 3

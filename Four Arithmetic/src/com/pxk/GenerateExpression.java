@@ -17,13 +17,24 @@ public class GenerateExpression {
     public static List<Expression> generateExpressionList(int size, int range, int operatorUpperLimit) {
         List<Expression> expressionList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            Expression e = generateExpression(range, operatorUpperLimit);
-            for (int j = 0; j < i; j++) {
-                while (Check.isSimilar(("" + e), ("" + expressionList.get(j)))) {
-                    e = generateExpression(range, operatorUpperLimit);
+            Expression ex = generateExpression(range, operatorUpperLimit);
+            boolean flag = true;
+            while (flag) {
+                try {
+                    Calculation.getResult("" + ex);
+                    flag = false;
+                } catch (Exception e) {
+                    // 重新生成式子
+                    ex = generateExpression(range, operatorUpperLimit);
                 }
             }
-            expressionList.add(i, e);
+            for (int j = 0; j < i; j++) {
+                while (Check.isSimilar(("" + ex), ("" + expressionList.get(j)))) {
+                    ex = generateExpression(range, operatorUpperLimit);
+                }
+            }
+
+            expressionList.add(i, ex);
 
         }
         System.out.println(size + " 条算式已经成功生成，并且写入 Exercises.txt 文件！");
@@ -64,8 +75,9 @@ public class GenerateExpression {
             expression.getOperators()[i - 1] = operator;
             fraction = new Fraction(range);
             while ((operator.equals("÷") && fraction.getValue() == 0)
-                    || operator.equals("-") && ((expression.getData()[i - 1].getValue() - fraction.getValue()) <= 0)
-                    || (operator.equals("×") && fraction.getValue() == 0)) {
+                    || operator.equals("-") && ((expression.getData()[i - 1].getValue() - fraction.getValue()) < 0))
+//                    || (operator.equals("×") && fraction.getValue() == 0))
+            {
                 if (operator.equals("-")) {
                     expression.getData()[i - 1] = new Fraction(range);
                     fraction = new Fraction(range);
